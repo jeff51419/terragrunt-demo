@@ -178,7 +178,5 @@ output "bottlerocket_nodes_role_name" {
 
 output "all_nodes_role_name" {
   description = "all role for self managed node groups created"
-  value       = module.eks.self_managed_node_groups[*]
+  value       =  [for s in module.eks.self_managed_node_groups : s.iam_role_name if s.iam_role_name != ""]
 }
-
-

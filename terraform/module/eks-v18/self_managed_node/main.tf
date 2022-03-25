@@ -18,6 +18,7 @@ locals {
     GithubRepo = "terraform-aws-eks"
     GithubOrg  = "terraform-aws-modules"
   }
+
 }
 
 data "aws_caller_identity" "current" {}
