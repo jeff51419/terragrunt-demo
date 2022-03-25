@@ -33,13 +33,9 @@ output "vpc-cidr-block" {
 }
 
 output "stp-vpc-private-subnet-ids" {
-  value = module.vpc.private_subnets_cidr_blocks
+  value =module.vpc.private_subnets
 }
 
 output "stp-vpc-default-sg" {
   value = data.aws_security_groups.stp-vpc-sg.ids
-}
-
-output "private-subnets" {
-  value = module.vpc.private_subnets
 }
