@@ -33,7 +33,7 @@ generate "provider" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "aws" {
-  shared_credentials_file = "~/.aws/credentials"
+  shared_credentials_files = ["~/.aws/credentials"]
 
   # Only these AWS Account IDs may be operated on by this template
   profile                 = "${local.aws_profile}"
@@ -77,8 +77,8 @@ terraform {
       "aws",
       "--non-recursive",
       "--verbose",
-      # "--skip-rules",
-      # "AC_AWS_0214,AC_AWS_0497,AC_AWS_0207"
+      "--skip-rules",
+      "AC_AWS_0369"
     ]
     run_on_error = true
   }
@@ -134,7 +134,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version   = ">= 3.72.0"
+      version   = ">= 4.6.0"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
@@ -167,6 +167,10 @@ terraform {
     kustomization = {
       source = "kbst/kustomization"
       version = "0.7.2"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 2.2"
     }  
   }
 }
