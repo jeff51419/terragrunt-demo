@@ -112,6 +112,7 @@ module "eks" {
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
       ]
 
+      # https://github.com/terraform-aws-modules/terraform-aws-eks/tree/master/modules/_user_data
       bootstrap_extra_args = <<-EOT
       # Enable kernel lockdown in "integrity" mode.
       # This prevents modifications to the running kernel, even by privileged users.
