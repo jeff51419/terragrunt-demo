@@ -356,35 +356,30 @@ resource "aws_iam_policy" "elasticfilesystem_access" {
   policy = data.aws_iam_policy_document.elasticfilesystem_access.json
 }
 
-locals {
-  all_nodes_role_name = [for s in module.eks.self_managed_node_groups : s.iam_role_name if s.iam_role_name != ""]
-}
-
-
 resource "aws_iam_role_policy_attachment" "alb_ingress" {
-  for_each   = toset( local.all_nodes_role_name )
-  role       = each.key
+  for_each   = module.eks.self_managed_node_groups
+  role       = "${lookup(each.value, "iam_role_name", "")}"
   policy_arn = aws_iam_policy.alb_ingress.arn
   depends_on = [module.eks]
 }
 
 resource "aws_iam_role_policy_attachment" "ecr_access" {
-  for_each   = toset( local.all_nodes_role_name )
-  role       = each.key
+  for_each   = module.eks.self_managed_node_groups
+  role       = "${lookup(each.value, "iam_role_name", "")}"
   policy_arn = aws_iam_policy.ecr_access.arn
   depends_on = [module.eks]
 }
 
 resource "aws_iam_role_policy_attachment" "autoscaler_access" {
-  for_each   = toset( local.all_nodes_role_name )
-  role       = each.key
+  for_each   = module.eks.self_managed_node_groups
+  role       = "${lookup(each.value, "iam_role_name", "")}"
   policy_arn = aws_iam_policy.autoscaler_access.arn
   depends_on = [module.eks]
 }
 
 resource "aws_iam_role_policy_attachment" "elasticfilesystem_access" {
-  for_each   = toset( local.all_nodes_role_name )
-  role       = each.key
+  for_each   = module.eks.self_managed_node_groups
+  role       = "${lookup(each.value, "iam_role_name", "")}"
   policy_arn = aws_iam_policy.elasticfilesystem_access.arn
   depends_on = [module.eks]
 }

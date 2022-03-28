@@ -94,11 +94,6 @@ module "eks" {
   }
 
   self_managed_node_groups = {
-    # Default node group - as provisioned by the module defaults
-    default_node_group = {
-      create = false
-    }
-
     # Bottlerocket node group
     bottlerocket = {
       name = "bottlerocket-self-mng"
@@ -118,6 +113,11 @@ module "eks" {
       ]
 
       bootstrap_extra_args = <<-EOT
+      # Enable kernel lockdown in "integrity" mode.
+      # This prevents modifications to the running kernel, even by privileged users.
+      [settings.kernel]
+      lockdown = "integrity"
+
       # The admin host container provides SSH access and runs with "superpowers".
       # It is disabled by default, but can be disabled explicitly.
       [settings.host-containers.admin]
@@ -144,37 +144,6 @@ module "eks" {
             throughput            = 300
           }
         }
-      }
-    }
-
-    linux = {
-      name = "linux"
-      create = false
-
-      min_size     = 1
-      max_size     = 5
-      desired_size = 2
-
-      bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
-
-      use_mixed_instances_policy = true
-      mixed_instances_policy = {
-        instances_distribution = {
-          on_demand_base_capacity                  = 0
-          on_demand_percentage_above_base_capacity = 20
-          spot_allocation_strategy                 = "capacity-optimized"
-        }
-
-        override = [
-          {
-            instance_type     = "m5.large"
-            weighted_capacity = "1"
-          },
-          {
-            instance_type     = "m6i.large"
-            weighted_capacity = "2"
-          },
-        ]
       }
     }
 

@@ -171,11 +171,6 @@ output "aws_auth_configmap_yaml" {
   value       = module.eks.aws_auth_configmap_yaml
 }
 
-output "bottlerocket_nodes_role_name" {
-  description = "role for self managed node groups created"
-  value       = element(module.eks.self_managed_node_groups[*].bottlerocket.iam_role_name, 0)
-}
-
 output "all_nodes_role_name" {
   description = "all role for self managed node groups created"
   value       =  [for s in module.eks.self_managed_node_groups : s.iam_role_name if s.iam_role_name != ""]
